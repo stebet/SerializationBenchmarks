@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnostics;
@@ -52,6 +54,12 @@ namespace Benchmarks
         public void JsonNetSerialization()
         {
             JsonConvert.SerializeObject(personToSerialize);
+        }
+
+        [Benchmark]
+        public void JsonNetSerializationWithBuffers()
+        {
+            BenchmarksHelper.SerializeJsonNetBuffers(personToSerialize);
         }
 
         [Benchmark]

@@ -16,6 +16,7 @@ namespace Benchmarks
         byte[] personBond;
         string personJsonNet;
         string personJsonJil;
+        string personJsonNetBuffers;
 
 
         private class Config : ManualConfig
@@ -44,6 +45,7 @@ namespace Benchmarks
             personProtobuf = BenchmarksHelper.SerializeProtobuf(personToSerialize);
             personJsonNet = JsonConvert.SerializeObject(personToSerialize);
             personJsonJil = Jil.JSON.Serialize(personToSerialize);
+            personJsonNetBuffers = BenchmarksHelper.SerializeJsonNetBuffers(personToSerialize);
         }
 
         [Benchmark]
@@ -68,6 +70,12 @@ namespace Benchmarks
         public void JsonJilDeserialization()
         {
             JSON.Deserialize<Person>(personJsonJil);
+        }
+
+        [Benchmark]
+        public void JsonNetWithBuffersDeserialization()
+        {
+            BenchmarksHelper.DeserializeJsonNetBuffers<Person>(personJsonNetBuffers);
         }
     }
 }

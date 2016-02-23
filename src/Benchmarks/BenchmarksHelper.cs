@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Buffers;
 using System.IO;
+using System.Text;
 using Bond;
 using Bond.IO.Unsafe;
 using Bond.Protocols;
+using Newtonsoft.Json;
 using ProtoBuf;
 
 namespace Benchmarks
@@ -11,6 +13,7 @@ namespace Benchmarks
     public static class BenchmarksHelper
     {
         private static ArrayPool<byte> bytePool = ArrayPool<byte>.Shared;
+        private static JsonSerializer serializer = JsonSerializer.CreateDefault();
 
         public static byte[] SerializeBond<T>(T value)
         {
@@ -34,6 +37,33 @@ namespace Benchmarks
                 Buffer.BlockCopy(buffer, 0, result, 0, result.Length);
                 bytePool.Return(buffer);
                 return result;
+            }
+        }
+
+        public static string SerializeJsonNetBuffers(object value)
+        {
+            using (var stringWriter = new StringWriter(new StringBuilder(256)))
+            {
+                using (var jsonTextWriter = new JsonTextWriter(stringWriter))
+                {
+                    jsonTextWriter.ArrayPool = CharArrayPool.Instance;
+                    serializer.Serialize(jsonTextWriter, value);
+                    jsonTextWriter.Flush();
+                    return stringWriter.GetStringBuilder().ToString();
+                }
+            }
+        }
+
+        public static T DeserializeJsonNetBuffers<T>(string value)
+        {
+            using (var stringReader = new StringReader(value))
+            {
+                using (var jsonTextReader = new JsonTextReader(stringReader))
+                {
+                    jsonTextReader.ArrayPool = CharArrayPool.Instance;
+                    var result = serializer.Deserialize<T>(jsonTextReader);
+                    return result;
+                }
             }
         }
 

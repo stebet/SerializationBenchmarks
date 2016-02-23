@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="BenchmarksHelper.cs" />
     <Compile Include="BondTypeAliasConverter.cs" />
+    <Compile Include="CharArrayPool.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

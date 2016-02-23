@@ -35,10 +35,13 @@ namespace Benchmarks.Tests
             var protobufDeserialized = BenchmarksHelper.DeserializeProtobuf<Person>(protobufSerialized);
             var jsonNetDeserialized = JsonConvert.DeserializeObject<Person>(jsonNetSerialized);
             var jsonJilDeserialized = JSON.Deserialize<Person>(jsonJilSerialized);
+            var jsonNetBuffersSerialized = BenchmarksHelper.SerializeJsonNetBuffers(personToSerialize);
+            var jsonNetBuffersDeserialized = BenchmarksHelper.DeserializeJsonNetBuffers<Person>(jsonNetBuffersSerialized);
             Assert.Equal(personToSerialize, bondDeserialized);
             Assert.Equal(personToSerialize, protobufDeserialized);
             Assert.Equal(personToSerialize, jsonNetDeserialized);
             Assert.Equal(personToSerialize, jsonJilDeserialized);
+            Assert.Equal(personToSerialize, jsonNetBuffersDeserialized);
         }
     }
 }
